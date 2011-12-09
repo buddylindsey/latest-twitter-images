@@ -1,0 +1,4 @@
+/vendor/*
+/public/css/styles.css
+./server.js
+./.git/*
