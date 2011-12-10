@@ -1,5 +1,5 @@
 /* @override http://localhost:4000/stylesheets/style.css */
-
+/*
 body {
   padding: 10px 0px 0px 5px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
@@ -50,3 +50,74 @@ a {
 .image .mojo{
 	margin-left: 520px;
 }
+*/
+
+body {
+  padding: 10px 0px 0px 5px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: -moz-linear-gradient(90deg, white 0%, #e2f2fe 100%) #e2f2fe;
+  background: -webkit-gradient(linear, left bottom, left top, from(white), to(#e2f2fe)) #e2f2fe;
+  background-repeat:no-repeat;
+  background-attachment:fixed;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#images .image{
+	display: block;
+	clear: both;
+	margin-bottom: 30px;
+	border-radius: 10px;
+	overflow: auto;
+	padding: 50px 10px 20px;
+	background: -moz-linear-gradient(90deg, #edf6fb 0%, #e7eff4 13.5%, white 82.1%) #ffffff;
+	background: -webkit-gradient(linear, left bottom, left top, from(#edf6fb), color-stop(0.135, #e7eff4), color-stop(0.821, white)) #ffffff;
+	-moz-box-shadow: 0 0 7px rgba(0, 0, 0, 0.4);
+	-webkit-box-shadow: 0 0 7px rgba(0, 0, 0, 0.4);
+}
+
+div#images {
+	width: 700px;
+	padding: 28px;
+	border-radius: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	background: -moz-linear-gradient(90deg, #ffffff 0%, #7cbced 100%) no-repeat fixed, #ffffff;
+	background: -webkit-gradient(linear, left bottom, left top, from(#ffffff), to(#7cbced)) no-repeat fixed, #ffffff;
+	-moz-box-shadow: 0 0 7px rgba(0, 0, 0, 0.4);
+	-webkit-box-shadow: 0 0 7px rgba(0, 0, 0, 0.4);
+}
+
+#images .wrap{
+	max-width: 600px;
+	
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
+#images .wrap img{
+	height: auto;
+	max-width: 600px;
+	border-radius: 5px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	-moz-box-shadow: 0 0 7px #000000;
+	-webkit-box-shadow: 0 0 7px #000000;
+}
+
+h1 {
+	text-align: center;
+}
+
+.image .mojo{
+	display: block;
+	width: 540px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 30px;
+}
+
