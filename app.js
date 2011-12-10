@@ -54,6 +54,8 @@ function searchTerms(){
   terms.push("yfrog");
   terms.push("plixi");
   terms.push("tweetphoto");
+  terms.push("instagr");
+  terms.push("imageshack");
 
   return terms.join("&amp;");
 }
