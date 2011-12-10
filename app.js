@@ -38,7 +38,11 @@ app.get('/', function(req, res, next){
 */
 });
 
-app.listen(7373);
+var port = process.env.PORT || 4000
+
+app.listen(port, function(){
+  console.log("Listening on " + port);
+});
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 
 // code
