@@ -5,7 +5,8 @@
 var express = require('express')
 , routes = require('./routes')
 , http = require('http')
-, jsonselect = require('JSONSelect');
+, jsonselect = require('JSONSelect')
+, _und = require('underscore');
 
 var app = module.exports = express.createServer(), io = require('socket.io').listen(app);
 
@@ -42,14 +43,40 @@ console.log("Express server listening on port %d in %s mode", app.address().port
 
 // code
 
+function searchTerms(){
+  var terms = [];
+
+  terms.push("imgur");
+  terms.push("twitpic");
+  terms.push("jpg");
+  terms.push("png");
+  terms.push("gif");
+  terms.push("yfrog");
+  terms.push("plixi");
+  terms.push("tweetphoto");
+
+  return terms.join("&amp;");
+}
+
+function getNewImages(all, recent){
+  var no_repeats = _und.difference(recent, all);
+
+  no_repeats.forEach(function(image){
+    all.push(image);
+  });
+  
+  return no_repeats;
+}
+
 io.sockets.on('connection', function (socket) {
   var since = null;
+  var all_images = [];
 
   get_images = function(){
     var options = {
       host: 'search.twitter.com',
       port: 80,
-      path: '/search.json?q=imgur&amp;twitpic&amp;gif&amp;jpg&rpp=25&include_entities=true&result_type=recent&since_id=' + since || "",
+      path: '/search.json?q=' + searchTerms() + '&rpp=25&include_entities=true&result_type=recent&since_id=' + since || "",
     };
 
     http.get(options, function(res){
@@ -62,7 +89,12 @@ io.sockets.on('connection', function (socket) {
         var data = chunks.join('');
         var data_json = JSON.parse(data);
         since = data_json.max_id_str;
-        socket.emit('images', jsonselect.match('.expanded_url', data_json ));
+
+        var recent = jsonselect.match('.expanded_url', data_json );
+
+        
+
+        socket.emit('images', getNewImages(all_images, recent));
       }).on('error', function(e) {
         console.log("YO i broke: " + e.message);
       });
@@ -72,11 +104,10 @@ io.sockets.on('connection', function (socket) {
   }
   
   get_images();
-  var interval = setInterval(get_images, 5000);
+  var interval = setInterval(get_images, 15000);
 
   socket.on('disconnect', function(){
     clearInterval(interval);
   });
 });
 
-// http://search.twitter.com/search.json?q=imgur&rpp=25&include_entities=true&result_type=recent
