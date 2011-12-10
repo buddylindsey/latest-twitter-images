@@ -81,7 +81,7 @@ io.sockets.on('connection', function (socket) {
     var options = {
       host: 'search.twitter.com',
       port: 80,
-      path: '/search.json?q=' + searchTerms() + '&rpp=25&include_entities=true&result_type=recent&since_id=' + since || "",
+      path: '/search.json?q=' + searchTerms() + '&rpp=50&include_entities=true&result_type=recent&since_id=' + since || "",
     };
 
     http.get(options, function(res){

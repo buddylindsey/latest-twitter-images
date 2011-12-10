@@ -17,4 +17,5 @@ html
           img(src="{{url}}")
         .mojo
           p {{text}}
-          cite(data-user-id="{{user_id}}") {{user}}
+          //cite(data-user-id="{{user_id}}") {{user}}
+          a(href='http://twitter.com/{{user}}') {{user}}
