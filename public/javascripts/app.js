@@ -1,4 +1,4 @@
-var socket = io.connect('http://evening-light-2225.herokuapp.com/');
+var socket = io.connect(document.uri);
 socket.on('images', function(data){
   data.forEach(function(image){
     var img = $("<img />", {src:image});

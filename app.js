@@ -32,7 +32,7 @@ app.configure('production', function(){
 
 // Routes
 app.get('/', function(req, res, next){ 
-  res.render('index', {locals: {'title': "Wasup"}});
+  res.render('index', {locals: {'title': "Wait for it..."}});
   /* 
 
 */
