@@ -6,7 +6,8 @@ var express = require('express')
 , routes = require('./routes')
 , http = require('http')
 , jsonselect = require('JSONSelect')
-, _und = require('underscore');
+, _und = require('underscore')
+, crypto = require('crypto');
 
 var app = module.exports = express.createServer(), io = require('socket.io').listen(app);
 
@@ -61,22 +62,20 @@ function searchTerms(){
   terms.push("instagr");
   terms.push("imageshack");
 
-  return terms.join("&amp;");
+  return terms.join("&");
 }
 
-function getNewImages(all, recent){
-  var no_repeats = _und.difference(recent, all);
-
-  no_repeats.forEach(function(image){
-    all.push(image);
-  });
+var createImageHash = function(image){
   
-  return no_repeats;
+  if(typeof image != 'string')
+    image = image.toString();
+    
+  return crypto.createHmac( 'sha512', 'bamf' ).update(image).digest('base64');
 }
 
 io.sockets.on('connection', function (socket) {
   var since = null;
-  var all_images = [];
+  var all_image_hashes = [];
 
   get_images = function(){
     var options = {
@@ -86,7 +85,10 @@ io.sockets.on('connection', function (socket) {
     };
 
     http.get(options, function(res){
+      
       var chunks = [];
+      var images_to_send = [];
+      
       res.on('data', function (chunk) {
         chunks.push(chunk);
       });
@@ -94,18 +96,40 @@ io.sockets.on('connection', function (socket) {
       res.on('end', function () {
         var data = chunks.join('');
         var data_json = JSON.parse(data);
-        since = data_json.max_id_str;
-
-        var recent = jsonselect.match('.expanded_url', data_json );
-
         
-
-        socket.emit('images', getNewImages(all_images, recent));
+        since = data_json.max_id;
+        
+        data_json.results.forEach(function(tweet,i){
+          var urls = jsonselect.match('.expanded_url', tweet );
+          if(urls.length>=1)
+            urls.forEach(function(url,i) {
+              
+              var image = {
+                url: url,
+                tweet_id: tweet.id,
+                user: tweet.from_user,
+                user_id: tweet.from_user_id,
+                text: tweet.text
+              }
+              
+              var hash = createImageHash(url);
+              
+              if( _und.indexOf(all_image_hashes,hash) === -1 ){
+                // not in hashes
+                images_to_send.push(image);
+                all_image_hashes.push(hash);
+              }
+              
+            });
+        });
+        
+        // Don't emit when we don't have any images to show
+        if( images_to_send.length >= 1 )
+          socket.emit('images', images_to_send );
+          
       }).on('error', function(e) {
         console.log("YO i broke: " + e.message);
       });
-
-
     });
   }
   

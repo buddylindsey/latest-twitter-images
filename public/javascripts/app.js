@@ -1,3 +1,15 @@
+
+jQuery(function($) {
+  
+  var socket = io.connect(document.uri);
+  
+  var image_template = Handlebars.compile($('#image').html());
+  
+  socket.on('images', function(data){
+    data.forEach(function(image){
+      $("#images").append(image_template(image));
+    });
+  });
 var socket = io.connect(document.uri);
 socket.on('images', function(data){
   data.forEach(function(image){
@@ -6,5 +18,4 @@ socket.on('images', function(data){
     $("#images").append(image);
   });
 });
-
-
+});

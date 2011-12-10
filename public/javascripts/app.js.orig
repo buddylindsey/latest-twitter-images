@@ -1,0 +1,25 @@
+<<<<<<< HEAD
+var socket = io.connect(document.uri);
+socket.on('images', function(data){
+  data.forEach(function(image){
+    var img = $("<img />", {src:image});
+    $("#images").append(img);
+    $("#images").append(image);
+  });
+});
+=======
+>>>>>>> 462d1ea32dadd5dfd63c207a21e9ca4836a82beb
+
+jQuery(function($) {
+  
+  var socket = io.connect('http://localhost:4000');
+  
+  var image_template = Handlebars.compile($('#image').html());
+  
+  socket.on('images', function(data){
+    data.forEach(function(image){
+      $("#images").append(image_template(image));
+    });
+  });
+
+});
