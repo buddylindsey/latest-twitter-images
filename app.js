@@ -67,8 +67,13 @@ function searchTerms(){
 
 var createImageHash = function(image){
   
-  if(typeof image != 'string')
+  if(_und.isNull(image) || _und.isUndefined(image))
+    return false;
+    
+  if(typeof image != 'string' && _und.isFunction(image.toString))
     image = image.toString();
+  else
+    return false;
     
   return crypto.createHmac( 'sha512', 'bamf' ).update(image).digest('base64');
 }
@@ -114,7 +119,7 @@ io.sockets.on('connection', function (socket) {
               
               var hash = createImageHash(url);
               
-              if( _und.indexOf(all_image_hashes,hash) === -1 ){
+              if( hash && _und.indexOf(all_image_hashes,hash) === -1 ){
                 // not in hashes
                 images_to_send.push(image);
                 all_image_hashes.push(hash);
